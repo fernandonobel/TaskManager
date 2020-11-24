@@ -59,7 +59,7 @@ class TriggeredTask : public Task {
 };
 
 /**
- * @brief A task that is run on a periodic basis.
+ * @brief A task that is run at a certain time.
  *
  */
 class TimedTask : public Task {
@@ -71,7 +71,7 @@ class TimedTask : public Task {
     inline uint64_t getRunTime() {return runTime; }
 
   protected:
-    uint64_t runTime;   // The system clock tick when the task can next run.
+    uint64_t runTime; // The system clock tick when the task can next run.
 };  
 
 #endif /* end of include guard: TASK_H */

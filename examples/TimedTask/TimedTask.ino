@@ -9,6 +9,9 @@ Task *tasks[1];
 class BlinkTask: public TimedTask {
   public:
 
+    uint64_t rate;
+    bool state;
+
     BlinkTask(uint64_t now, uint64_t rate)
       : TimedTask(now),
       rate(rate) {
@@ -20,11 +23,8 @@ class BlinkTask: public TimedTask {
     digitalWrite(LED_BUILTIN, LOW);
   };
 
-  private:
-    uint64_t rate;
-    bool state;
 
-    void run(uint64_t now) override {
+    void run(uint64_t now) {
       state = !state;
       digitalWrite(LED_BUILTIN, state);
 
@@ -39,7 +39,7 @@ class BlinkTask: public TimedTask {
 void setup() {
   Serial.begin(9600);
 
-  tasks[0] = new BlinkTask(0,100);
+  tasks[0] = new BlinkTask(0,1000);
   scheduler = new TaskScheduler(tasks, NUM_TASKS(tasks));
 }
 
