@@ -39,9 +39,24 @@
  */
 class Task {
   public:
+    /**
+    * @brief: Can the task currently run?
+    * This method must be overriden to implement a task.
+    *
+    * @param: uint64_t now Current time in units defined in the TaskScheduler.
+    *
+    * @return: bool True if the task has to be runned.
+    */
     virtual bool canRun(uint64_t now) = 0; // Can the task currently run?
-    virtual void run(uint64_t now) = 0;    // Run the task.
 
+    /**
+    * @brief: Run the task.
+    * This method must be overriden to implement a task.
+    *
+    * @param: uint64_t now Current time in units defined in the TaskScheduler.
+    *
+    * @return: void.
+    */virtual void run(uint64_t now) = 0;    // Run the task.
 };
 
 /**
@@ -50,28 +65,82 @@ class Task {
  */
 class TriggeredTask : public Task {
   public:
-    bool        canRun(uint64_t now) override;
-    inline void setRunnable() { runFlag = true; }
+    /**
+    * @brief: Can the task currently run?
+    * The task can run when the runFlag is true.
+    *
+    * @param: uint64_t now Current time in units defined in the TaskScheduler.
+    *
+    * @return: bool True if the task has to be runned.
+    */
+    inline bool canRun(uint64_t now) override { return runFlag; };
+
+    /**
+    * @brief: Mark the task as runnable.
+    *
+    * @return: bool True if the task has to be runned.
+    */
+    inline void setRunnable() { runFlag = true; } 
+
+    /**
+    * @brief: Mark the task as non-runnable.
+    *
+    * @return: bool True if the task has to be runned.
+    */
     inline void resetRunnable() { runFlag = false; }
 
   protected:
-    bool runFlag; // True if the task is currently runnable.
+    // True if the task is currently runnable.
+    bool runFlag; 
 };
 
 /**
- * @brief A task that is run at a certain time.
+ * @brief A task that runs at a certain time.
  *
  */
 class TimedTask : public Task {
   public:
-    inline          TimedTask(uint64_t when) { runTime = when; }
-    bool            canRun(uint64_t now) override;
-    inline void     setRunTime(uint64_t when) { runTime = when; }
-    inline void     incRunTime(uint64_t inc) { runTime += inc; }
+    /**
+    * @brief: Constuctor of TimedTask.
+    *
+    * @param: uint64_t when The time when the task can run.
+    */
+    inline TimedTask(uint64_t when) { runTime = when; }
+
+    /**
+    * @brief: Can the task currently run?
+    * The task can run when current time is >= runTime.
+    *
+    * @param: uint64_t now Current time in units defined in the TaskScheduler.
+    *
+    * @return: bool True if the task has to be runned.
+    */
+    inline bool canRun(uint64_t now) override { return now >= runTime; };
+
+    /**
+    * @brief: Set the time when the task can run.
+    *
+    * @param: uint64_t when The time when the task can run.
+    */
+    inline void setRunTime(uint64_t when) { runTime = when; }
+
+    /**
+    * @brief: Increment the time when the task can run.
+    *
+    * @param: uint64_t inc The time increment we want to add.
+    */
+    inline void incRunTime(uint64_t inc) { runTime += inc; }
+
+    /**
+    * @brief: Get the time when the task can run.
+    *
+    * @param: uint64_t The time when the task can run.
+    */
     inline uint64_t getRunTime() {return runTime; }
 
   protected:
-    uint64_t runTime; // The system clock tick when the task can next run.
+    // The system clock tick when the task can next run.
+    uint64_t runTime; 
 };  
 
 #endif /* end of include guard: TASK_H */
