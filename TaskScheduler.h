@@ -41,12 +41,29 @@
  */
 class TaskScheduler {
   public:
+    /**
+     * @brief: Constructor of TaskScheduler.
+     *
+     * @param: Task **_tasks Array of pointers of tasks to execute.
+     *       : uint8_t _numTasks Number of tasks in the array.
+     *
+     */
     TaskScheduler(Task **task, uint8_t numTasks);
+
+    /**
+     * @brief: Check if any task needs to be executed and execute it.
+     *
+     * @param: uint64_t now Current time in 100 nanoseconds.
+     *
+     * @return: void 
+     */
     void run(uint64_t now);
 
   private:
-    Task **tasks;   // Array of task pointers.
-    int numTasks;   // Number of tasks in the array.
+    // Array of task pointers.
+    Task **tasks;   
+    // Number of tasks in the array.
+    int numTasks;   
 
 };
 

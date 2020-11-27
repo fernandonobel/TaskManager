@@ -17,26 +17,12 @@
 
 #include "TaskScheduler.h"
 
-/**
- * @brief: Constructor of TaskScheduler.
- *
- * @param: Task **_tasks Array of pointers of tasks to execute.
- *       : uint8_t _numTasks Number of tasks in the array.
- *
- */
+
 TaskScheduler::TaskScheduler(Task **_tasks, uint8_t _numTasks) :
   tasks(_tasks),
   numTasks(_numTasks) {
   }
 
-
-/**
- * @brief: Check if any task needs to be executed and execute it.
- *
- * @param: uint64_t now Current time in 100 nanoseconds.
- *
- * @return: void 
- */
 void TaskScheduler::run(uint64_t now) {
   Task **tpp = tasks;
   for (int t = 0; t < numTasks; t++) {

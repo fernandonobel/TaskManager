@@ -1,45 +1,53 @@
-#include <Debugger.h>
 #include <Task.h>
 #include <TaskScheduler.h>
 
-TaskScheduler *scheduler;
-
-Task *tasks[1];
-
-class BlinkTask: public TimedTask {
+// Timed task to blink a LED.
+class Blinker : public TimedTask
+{
   public:
-
-    uint64_t rate;
-    bool state;
-
-    BlinkTask(uint64_t now, uint64_t rate)
-      : TimedTask(now),
-      rate(rate) {
-    // initialize digital pin LED_BUILTIN as an output.
-    pinMode(LED_BUILTIN, OUTPUT);
-
-    // Start led off;
-    state = false;
-    digitalWrite(LED_BUILTIN, LOW);
-  };
-
-
-    void run(uint64_t now) {
-      state = !state;
-      digitalWrite(LED_BUILTIN, state);
-
-      // Run again in the specified time.
-      incRunTime(rate);
-    }
-
+    // Create a new blinker for the specified pin and rate.
+    Blinker(uint8_t _pin, uint64_t _rate);
+    virtual void run(uint64_t now);
+  private:
+    // LED pin.
+    uint8_t pin;      
+    // Blink rate.
+    uint32_t rate;    
+    // Current state of the LED.
+    bool on;          
 };
 
+Blinker::Blinker(uint8_t _pin, uint64_t _rate)
+  : TimedTask(millis()),
+  pin(_pin),
+  rate(_rate),
+  on(false)
+{
+  // Set pin for output.
+  pinMode(pin, OUTPUT);     
+}
+
+void Blinker::run(uint64_t now)
+{
+  // If the LED is on, turn it off and remember the state.
+  if (on) {
+    digitalWrite(pin, LOW);
+    on = false;
+    // If the LED is off, turn it on and remember the state.
+  } else {
+    digitalWrite(pin, HIGH);
+    on = true;
+  }
+  // Run again in the required number of milliseconds.
+  incRunTime(rate);
+}
+
+TaskScheduler *scheduler;
+Task *tasks[1];
 
 // the setup function runs once when you press reset or power the board
 void setup() {
-  Serial.begin(9600);
-
-  tasks[0] = new BlinkTask(0,1000);
+  tasks[0] = new Blinker(13,1000);
   scheduler = new TaskScheduler(tasks, NUM_TASKS(tasks));
 }
 

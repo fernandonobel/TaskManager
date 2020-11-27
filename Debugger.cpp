@@ -74,7 +74,7 @@ void Debugger::run(uint64_t now)
 }
 
 /**
- * @brief: Provies basic debug info from other tasks.
+ * @brief: Provies basic debug info for other tasks.
  *
  * @param: String debugMsg Debug message to send.
  *
