@@ -35,8 +35,7 @@
 
 /**
  * @brief The task scheduler will execute the tasks when needed.
- *
- * @details A task has priotity form another is it is added first to the **tasks.
+ * A task has priotity form another is it is added first to the **tasks.
  * This way, first added tasks will have the most priotity.
  *
  */

@@ -56,7 +56,8 @@ class Task {
     * @param: uint64_t now Current time in units defined in the TaskScheduler.
     *
     * @return: void.
-    */virtual void run(uint64_t now) = 0;    // Run the task.
+    */
+    virtual void run(uint64_t now) = 0;    // Run the task.
 };
 
 /**
