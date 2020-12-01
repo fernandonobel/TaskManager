@@ -17,7 +17,6 @@
 
 #include "TaskScheduler.h"
 
-
 TaskScheduler::TaskScheduler(Task **_tasks, uint8_t _numTasks) :
   tasks(_tasks),
   numTasks(_numTasks) {
@@ -27,6 +26,11 @@ void TaskScheduler::run(uint64_t now) {
   Task **tpp = tasks;
   for (int t = 0; t < numTasks; t++) {
     Task *tp = *tpp;
+
+    if (!tp) {
+      continue;
+    }
+
     if (tp->canRun(now)) {
       tp->run(now);
       break;

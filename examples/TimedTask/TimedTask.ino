@@ -39,10 +39,8 @@ void Blinker::run(uint64_t now) {
   incRunTime(rate);
 }
 
-
 // Task to echo serial input.
-class Echoer : public Task
-{
+class Echoer : public Task {
   public:
     Echoer();
     virtual void run(uint64_t now);
@@ -50,43 +48,42 @@ class Echoer : public Task
 };
 
 Echoer::Echoer()
-  : Task()
-{
-  Serial.begin(9600);
-}
+  : Task() {
+    Serial.begin(9600);
+  }
 
 
-bool Echoer::canRun(uint64_t now)
-{
+bool Echoer::canRun(uint64_t now) {
   return Serial.available() > 0;
 }
 
-void Echoer::run(uint64_t now)
-{
+void Echoer::run(uint64_t now) {
   while (Serial.available() > 0) {
-    char incomingByte;
-
     // read the incoming byte:
-    incomingByte = Serial.read();
+    char incomingByte = Serial.read();
 
     // say what you got:
     Serial.print((char)incomingByte);
   }
 }
 
-TaskScheduler *scheduler;
-Task *tasks[2];
-
 // the setup function runs once when you press reset or power the board
 void setup() {
+  TaskScheduler *scheduler;
 
-  tasks[0] = new Blinker(13,1000);
-  tasks[1] = new Echoer();
+  Task *tasks[] = {
+    new Blinker(13,1000),
+    new Echoer()
+  };
 
   scheduler = new TaskScheduler(tasks, NUM_TASKS(tasks));
+
+  while(1) {
+    scheduler->run(millis()); 
+  }
 }
 
 // the loop function runs over and over again forever
 void loop() {
-  scheduler->run(millis()); 
+  // scheduler->run() is a blocking function, so loop() is never reached.
 }
